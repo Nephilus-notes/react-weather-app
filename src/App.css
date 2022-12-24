@@ -1,31 +1,131 @@
+:root {
+  --clr-primary-200: hsla(218, 100%, 95%, 1);
+  --clr-primary-400: hsla(222, 94%, 50%, 1);
+  --clr-accent-400: hsla(89, 69%, 48%, 1);
+  --clr-neutral-100: hsla(0, 0%, 100%, 1);
+  --clr-neutral-400: hsla(0, 0%, 61%, 1);
+  --clr-neutral-900: hsla(0, 0%, 0%, 1);
+
+  --fw-light: 300;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-heavy: 600;
+  --fw-bold: 700;
+}
+
+
+/* RESET */
+*,
+*::after,
+::before {
+    box-sizing: border-box;
+}
+
+body,
+header,
+main,
+section,
+footer,
+div,
+span,
+img,
+h1,
+h2,
+h3,
+p,
+ul,
+li,
+a {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+html:focus-within {
+    scroll-behavior: smooth;
+}
+
+body{
+  background-image: linear-gradient(45deg, black, rgb(77, 77, 77), rgb(28, 22, 22), rgb(49, 47, 47));    background-position: left;
+  background-position: left; 
+  background-size: 400%;
+  animation: bganimation 20s infinite alternate;
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+}
+@keyframes bganimation {
+  0% {
+      background-position: left;
+  }
+  100% {
+      background-position: right;
+  }
+}
+
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+li {
+  list-style: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+button {
+  text-transform: capitalize;
+
+  padding: 5px 10px;
+  background-color: beige;
+  border-radius: 5px;
+  box-shadow: 0 0 3px;
+  width: clamp( 40px, 5rem + 5vw, 20rem)
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.button {
+  text-transform: capitalize;
+  display:inline-block;
+  padding: 5px 10px;
+  background-color: beige;
+  border-radius: 5px;
+  box-shadow: 0 0 3px;
+  width: clamp( 40px, 5rem + 5vw, 20rem)
+}
+
+button:hover {
+  box-shadow: inset 0 0 5px 1px;
 }
 
 .App-link {
   color: #61dafb;
+}
+
+h1{
+  color: beige;
+}
+
+body {
+
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+ul,
+ol {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
 }
 
 @keyframes App-logo-spin {
@@ -35,4 +135,114 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+nav {
+  margin: 0 20px;
+  padding: 10px;
+  max-width: 70%;
+  background-color: rgb(88, 88, 88);
+  margin-inline: auto;
+  border-radius: 4px;
+  font-weight: 700;
+  border: 2px solid black
+}
+
+
+a {
+  text-decoration: none;
+
+}
+
+nav a {
+  color: white;
+  cursor: pointer;
+}
+ul {
+  padding: 0;
+  margin: 0;
+}
+
+
+nav li {
+  display: inline-block;
+  margin: 0 20px;
+}
+
+.BasicCityTemps {
+  max-width: 500px;
+  border: 1px solid darkgrey;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 3px black;
+  padding:5px;
+  background-color: rgba(39, 39, 35, .7);
+  color: white;  
+}
+
+
+.flex-container {
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-width: 1000px;
+  margin-inline: auto;
+}
+
+.container {
+  margin-inline: auto;
+  ;
+}
+
+.infoFields{
+  border-radius: 1rem;
+  background-color: black;
+  color:rgb(255, 235, 205);
+  margin-bottom: 1rem;
+  padding: .3rem;
+  width: clamp(10rem, 5rem + 15vw, 15rem);
+  margin-inline: auto;
+}
+
+.radioFlex {
+  gap:20px;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+.radioButtons {
+  align-content: space-between;
+  display: flex;
+  flex-direction: column;
+}
+
+.radiosLabels {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  color: bg-primary-100;
+}
+
+.locationInfo {
+  background-color: rgba(169, 169, 246, .6);
+  height: 20%;
+  padding: 10px;
+  border-bottom: 15px;
+  width: clamp();
+  margin: 0 20px 20px;
+  padding: 10px;
+  max-width: 70%;
+  margin-inline: auto;
+  border-radius: 4px;
+  font-weight: 700;
+  border: 2px solid black
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
 }
