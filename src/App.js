@@ -20,9 +20,9 @@ function App() {
             <li>
               <Link to="/">Home</Link>
             </li>
-            <li>
+            {/* <li>
               <Link to="/temps">City Temps</Link>
-            </li>
+            </li> */}
             <li>
               <Link to="/profile">Profile</Link>
             </li>
@@ -36,12 +36,10 @@ function App() {
           <Routes>
             <Route path='/' element={ <Home/> }/>
             <Route path='/profile' element={ <Profile/> }/>
-            <Route path='/temps' element={ <SingleCity/> }>
-              
+            <Route path='/temps'>
+               <Route path=':cityName' element={ <SingleCity/> }/>
             </Route>
-            <Route></Route>
-              <Route></Route>
-
+           
           </Routes>
 
      </BrowserRouter>

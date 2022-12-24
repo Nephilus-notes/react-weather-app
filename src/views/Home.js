@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { DataContext } from '../contexts/DataProvider';
 import BasicCityTemps from '../components/BasicCityTemps';
 import SearchBy from '../components/SearchBy';

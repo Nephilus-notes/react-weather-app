@@ -4,6 +4,9 @@ import { DataContext } from "../contexts/DataProvider";
 
 export default function BasicCityTemps(props) {
   const { temp } = useContext(DataContext);
+
+
+
   if (temp)
    {
     return (
@@ -34,7 +37,7 @@ export default function BasicCityTemps(props) {
               Current Humidity: {temp?.main.humidity}%
             </li>
           </ul>
-          <a href="" className="button mb-2">More Info</a>
+          <Link to={ `/temps/${temp.name }`}> <p className='button'> More Info</p></Link>
 
         </div>
       </div>

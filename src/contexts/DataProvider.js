@@ -39,11 +39,12 @@ export const DataProvider = function (props) {
     const getWeatherInfoByCityName = async function(cityName) {
         try {
             console.log(`api.openweathermap.org/data/2.5/forecast?q=${cityName}&JSON&appid=${ weatherApiKey }&units=imperial`)
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&JSON&appid=${ weatherApiKey }&units=imperial`)
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&JSON&appid=${ weatherApiKey }&units=imperial`)
             console.log("got it back, changing to json")
             const weatherData = await response.json()
             console.log(weatherData)
             setTemp(weatherData)
+            console.log(temp)
         }
         catch(err) {
             // errorFunct()
@@ -52,7 +53,7 @@ export const DataProvider = function (props) {
     
     const getWeatherInfoByZipCode = async function(zipCode) {
         try {
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${zipCode},US&JSON&appid=${ weatherApiKey }&units=imperial`)
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${zipCode},US&JSON&appid=${ weatherApiKey }&units=imperial`)
             const weatherData = await response.json()
             setTemp(weatherData)
         }
@@ -77,8 +78,7 @@ export const DataProvider = function (props) {
         
                     userTempsDocs.push({
                         id:doc.id,
-                        uid: user.uid,
-                        username:user.username,
+                        cityName:doc.name,
                         ...doc.data()
                     })
                     const copyTemps = [...userTempsDocs]
@@ -123,40 +123,37 @@ export const DataProvider = function (props) {
     
     }
 
-    async function loadTemp(uid, id){
-        for (let temp in userTemps) {
-            if (temp.id === id) {
-                setTemp(temp)
-                return
+    async function loadTemp(newTemp){
+        for (let userTemp in userTemps) {
+            if (newTemp === userTemp) {
+                return userTemp
+            } else {
+                const userTempsDocs = userTemps
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${newTemp.cityName}&appid=790f14b98ea6a36905f407f0f4cd6157&units=imperial`)
+            // console.log("got it back, changing to json")
+            const weatherData = await response.json()
+            setTemp(weatherData)
+            userTempsDocs.push({
+                id: weatherData.id,
+
+                ...weatherData.data()
+            })
+            const copyTemps = [...userTempsDocs]
+            // console.log(copyTemps)
+            setUserTemps(copyTemps)
+
             }
-        }
-
-
-        // const tempRef = doc(db, 'user', uid, 'city', id)
-        // const tempSnap = await getDoc(tempRef)
-
-        // console.log({
-        //     id: carSnap.id,
-        //     ...userDataObject,
-        //     ...carSnap.data()
-        // })
-        // if (carSnap.exists()) {
-        //     return {
-        //         id: carSnap.id,
-        //         ...userDataObject,
-        //         ...carSnap.data()
-        //     }
-        // } else {
-        //     console.log(`Car with id ${id} does not exist`)
-        // }
-    }
+        }    
+    };
 
 
     const value = {
         temp,
         addCity,
         userTemps,
-        getWeatherDataZipOrCity
+        getWeatherDataZipOrCity, 
+        loadTemp, 
+        setTemp
     }
 
     return (

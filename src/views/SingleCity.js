@@ -1,29 +1,33 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom'
-import BasicCityTemps from '../components/BasicCityTemps'
+import DetailedCityWeather from '../components/DetailedCityWeather';
 import { DataContext } from '../contexts/DataProvider';
 
 
 export default function CarSingle() {
-    const { cityName } = useParams()
-    const { temp } = useContext(DataContext)
+    const { name } = useParams()
+    const { temp, loadTemp, setTemp } = useContext(DataContext)
 
-    // useEffect(() => {
-    //     async function handleLoadCar(){
-    //         const data = await loadCar(uid, id)
-    //         setCar(data)
-    //         console.log(data)
-    //     }
+    useEffect(() => {
+        async function handleLoadTemp(){
+            const data = await loadTemp(name)
+            setTemp(data)
+            console.log(data)
+        }
     
-    //     handleLoadCar()
-    //     },[id])
+        handleLoadTemp()
+        },[name, loadTemp, setTemp])
+
+    const checkTemp = function () {
+        console.log(temp)
+    }
 
     return (
         <div className="car">
              <div className="flex-container">
+           <DetailedCityWeather/>
                 
-           
-            </div>
+            </div><button className="checkTemp" onClick={ checkTemp }>Check Temp!</button>
         </div>
     )
 }
