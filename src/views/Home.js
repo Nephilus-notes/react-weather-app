@@ -14,7 +14,7 @@ export default function Home(props) {
         <h1>Home</h1>
         <SearchBy/> 
            {
-            (temp) ?
+            (temp && user.loggedIn) ?
         <BasicCityTemps temp = {temp} cityName='st louis'/>  :
         <></>
         }

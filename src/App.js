@@ -1,6 +1,6 @@
 
 import './App.css';
-import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useLocation, redirect  } from "react-router-dom";
 import { AuthContext } from "./contexts/AuthProvider";
 import { useContext } from 'react';
 import Home from "./views/Home"
@@ -28,8 +28,8 @@ function App() {
             </li>
             {
             (user.loggedIn) ?
-          <li><button onClick={ logout } className='button'>Log Out</button></li> :
-          <li><button onClick={ login } className='button'>Login</button></li>
+          <li><Link to="/"><button onClick={ logout } className='button'>Log Out</button></Link></li> :
+          <li><Link to="/"><button onClick={ login } className='button'>Login</button></Link></li>
           }
           </ul>
         </nav>
@@ -41,7 +41,7 @@ function App() {
             </Route>
            
           </Routes>
-
+          <redirect to="/" />
      </BrowserRouter>
     </div>
   );
