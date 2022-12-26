@@ -1,10 +1,12 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DataContext } from "../contexts/DataProvider";
 import BasicCityTemps from "./BasicCityTemps";
 
 export default function DetailedCityWeather(props) {
   const { temp } = useContext(DataContext);
+  const [loadState, setLoadState] = useState("LOADING")
+
 
     const windDirection = function(windDegrees) {
         if (windDegrees < 22  || windDegrees <=337 ) {
@@ -26,6 +28,16 @@ export default function DetailedCityWeather(props) {
         } 
     }
 
+    // useEffect(() => {
+    //     const findDaylight = function(sunrise,sunset) {
+    //         const sunRise = new Date(sunrise * 1000)
+    //         const sunSet = new Date(sunset * 1000)
+    //         let sunriseToday = sunRise.toLocaleString();console.log(sunriseToday)
+    //         let sunsetToday = sunSet.toLocaleString();console.olog(sunsetToday)
+    //         return sunRise, sunSet
+    //     }
+    //     findDaylight(temp.sys.sunrise, temp.sys.sunset)
+    // }, [temp])
   if (temp)
   {
     let windPointer =  windDirection(temp.wind.deg)
@@ -36,7 +48,9 @@ export default function DetailedCityWeather(props) {
          <h2>{temp?.name}</h2>
        </div>
        <div className="flex-container alignBottom">
+
          <div className="currentTempDiv">
+            <img src={` `} alt="" />
            <p className="currentTemp">{temp?.main.temp.toFixed(1)}&deg;</p>
            <p className="feelsLike">
              Feels like: <strong>{temp.main?.feels_like}&deg;</strong>
@@ -64,6 +78,7 @@ export default function DetailedCityWeather(props) {
             <li className='infoFields'>Wind: { windPointer } {temp.wind.speed } <small>mph </small> </li>
             <li className='infoFields'>Visibility: {(temp.visibility/1000 * 0.621371).toFixed(1)} miles </li>
             <li className='infoFields'>Barometric Pressure: { (temp.main.pressure * (.02953)).toFixed(1)}</li>
+            <li className="infoFields"> sunrise { temp.sys.sunrise }</li>
         </ul>
     </div>
        </div>

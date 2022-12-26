@@ -23,12 +23,21 @@ export default function Profile(props) {
     return (
       <div className="Profile">
         <h1>Profile</h1>
+<div>
+        <h2>Favorite a city</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="flex-container">
+            <input type="text" name="cityName" placeholder="City Name" />
+          </div>
+          <button className="button">Submit Favorite!</button>
+        </form>
+   </div>   
 
-        <ul>
+          {/* <p>Favorite Cities:</p> */}
           <div className="flex-container">
             {userTemps?.map((temp) => ( <Button temp={temp} handleClick={async () => {
                   console.log(temp);
-                  const newTemp = await loadTemp(temp);
+                  const newTemp = await loadTemp(temp.cityName);
                   console.log(newTemp);
                   setTemp(newTemp);
                 }}
@@ -36,17 +45,11 @@ export default function Profile(props) {
               />
             ))}
           </div>
+          {/* <div className="flex-container"> */}
 
             {temp ? <BasicCityTemps temp={temp} showLink="true" /> : <></>}
 
-        </ul>
-        <h2>Favorite a city</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="flex-container">
-            <input type="text" name="cityName" placeholder="City Name" />
-          </div>
-          <button className="button">Show Me The Weather!</button>
-        </form>
+   {/* </div> */}
       </div>
     );
   } else {

@@ -5,18 +5,18 @@ import { DataContext } from '../contexts/DataProvider';
 
 
 export default function CarSingle() {
-    const { name } = useParams()
+    const { cityName } = useParams()
     const { temp, loadTemp, setTemp } = useContext(DataContext)
 
     useEffect(() => {
         async function handleLoadTemp(){
-            const data = await loadTemp(name)
+            const data = await loadTemp(cityName)
             setTemp(data)
             console.log(data)
         }
     
         handleLoadTemp()
-        },[name, loadTemp, setTemp])
+        },[loadTemp, setTemp])
 
     const checkTemp = function () {
         console.log(temp)

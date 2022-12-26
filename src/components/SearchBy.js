@@ -1,13 +1,17 @@
+import userEvent from '@testing-library/user-event';
 import { useState, useContext } from 'react';
 import { DataContext } from '../contexts/DataProvider';
+import { AuthContext } from '../contexts/AuthProvider';
  
 export default function SearchBy(props) {
     const [placeholderCity, setPlaceholderCity] = useState('Input City Name')
     const { getWeatherDataZipOrCity } = useContext(DataContext)
+    const { user } = useContext(AuthContext)
 
     // console.log(props)
     function handleSearchBy(event) {
         event.preventDefault()
+        if (user.loggedIn) {
         const formData = new FormData(event.target)
         const radioAnswers = formData.get('searchBy')
         console.log(radioAnswers)
@@ -22,6 +26,12 @@ export default function SearchBy(props) {
         // event.target.querySelector('[name="searchParameters"]').placeholder = cityName
 
         setPlaceholderCity(cityName)
+        } else {
+            // Not doing anything right now, but I would love to show an error message.
+            return (
+                <p>Please Login</p>
+            )
+        }
     }
 
     return (

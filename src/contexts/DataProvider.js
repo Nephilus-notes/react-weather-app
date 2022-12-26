@@ -11,16 +11,16 @@ export const DataProvider = function (props) {
     const [userTemps, setUserTemps] = useState([])
     const weatherApiKey = process.env.REACT_APP_WEATHER_API_KEY
 
-    useEffect(() => {
-        async function getTemp(){
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=st louis&appid=790f14b98ea6a36905f407f0f4cd6157&units=imperial`)
-            // console.log("got it back, changing to json")
-            const weatherData = await response.json()
-            setTemp(weatherData)
+    // useEffect(() => {
+    //     async function getTemp(){
+    //         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=st louis&appid=790f14b98ea6a36905f407f0f4cd6157&units=imperial`)
+    //         // console.log("got it back, changing to json")
+    //         const weatherData = await response.json()
+    //         setTemp(weatherData)
             
-        }
-        getTemp()
-    }, [])
+    //     }
+    //     getTemp()
+    // }, [])
         
     const getWeatherDataZipOrCity = async function(radioBtnAnswer, searchParameters) {
         console.log("getting by something")
@@ -123,13 +123,13 @@ export const DataProvider = function (props) {
     
     }
 
-    async function loadTemp(newTemp){
+    async function loadTemp(cityName){
         for (let userTemp in userTemps) {
-            if (newTemp === userTemp) {
-                return userTemp
+            if (cityName === userTemp.cityName) {
+                 setTemp(userTemp)
             } else {
                 const userTempsDocs = userTemps
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${newTemp.cityName}&appid=790f14b98ea6a36905f407f0f4cd6157&units=imperial`)
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=790f14b98ea6a36905f407f0f4cd6157&units=imperial`)
             // console.log("got it back, changing to json")
             const weatherData = await response.json()
             setTemp(weatherData)
