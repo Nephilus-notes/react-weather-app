@@ -2,5 +2,5 @@
 
     // console.log(props)
     return (
- <button onClick={ props.handleClick } className='button' >{ props.temp.cityName }</button> 
+ <button onClick={ props.handleClick } className='button' >{ props.forecast.name }</button> 
     )}

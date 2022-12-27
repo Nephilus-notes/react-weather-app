@@ -7,20 +7,9 @@ export const DataContext = createContext()
 export const DataProvider = function (props) {
     const db = getFirestore()
     const { user } = useContext(AuthContext)
-    const [temp, setTemp] = useState('')
-    const [userTemps, setUserTemps] = useState([])
+    const [forecast, setForecast] = useState("")
+    const [userCities, setUserCities] = useState([])
     const weatherApiKey = process.env.REACT_APP_WEATHER_API_KEY
-
-    // useEffect(() => {
-    //     async function getTemp(){
-    //         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=st louis&appid=790f14b98ea6a36905f407f0f4cd6157&units=imperial`)
-    //         // console.log("got it back, changing to json")
-    //         const weatherData = await response.json()
-    //         setTemp(weatherData)
-            
-    //     }
-    //     getTemp()
-    // }, [])
         
     const getWeatherDataZipOrCity = async function(radioBtnAnswer, searchParameters) {
         console.log("getting by something")
@@ -38,13 +27,14 @@ export const DataProvider = function (props) {
 
     const getWeatherInfoByCityName = async function(cityName) {
         try {
-            console.log(`api.openweathermap.org/data/2.5/forecast?q=${cityName}&JSON&appid=${ weatherApiKey }&units=imperial`)
+            // console.log(`api.openweathermap.org/data/2.5/forecast?q=${cityName}&JSON&appid=${ weatherApiKey }&units=imperial`)
             const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&JSON&appid=${ weatherApiKey }&units=imperial`)
-            console.log("got it back, changing to json")
+            // console.log("got it back, changing to json")
             const weatherData = await response.json()
-            console.log(weatherData)
-            setTemp(weatherData)
-            console.log(temp)
+            // console.log(weatherData)
+            setForecast(weatherData)
+            // console.log(forecast)
+            return weatherData
         }
         catch(err) {
             // errorFunct()
@@ -55,7 +45,8 @@ export const DataProvider = function (props) {
         try {
             const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${zipCode},US&JSON&appid=${ weatherApiKey }&units=imperial`)
             const weatherData = await response.json()
-            setTemp(weatherData)
+            setForecast(weatherData)
+            return weatherData
         }
         catch(err) {
             // errorFunct()
@@ -66,8 +57,8 @@ export const DataProvider = function (props) {
         if (!user.loggedIn) {
             return
         } 
-            async function getUserTemps(){
-                const userTempsDocs = []
+            async function getUserCities(){
+                const userCitiesDocs = []
                 // console.log(user.uid)
                 const q = query(collection(db, 'user', user.uid, 'city'))
                 // console.log(q)
@@ -76,81 +67,70 @@ export const DataProvider = function (props) {
     
                 querySnapshot.forEach(async (doc) => {
         
-                    userTempsDocs.push({
-                        id:doc.id,
-                        cityName:doc.name,
+                    userCitiesDocs.push({
                         ...doc.data()
                     })
-                    const copyTemps = [...userTempsDocs]
+                    const copyTemps = [...userCitiesDocs]
                     // console.log(copyTemps)
-                    setUserTemps(copyTemps)
+                    setUserCities(copyTemps)
                 })
     
             }
-            getUserTemps()
-        },[user.loggedIn])
+            getUserCities()
+        },[user.loggedIn, addCity])
 
-    // useEffect(() => {
-    //     async function handleGetTemp(){
-    //         const data = await getTemp()
-    //         setCar(data)
-    //         console.log(data)
-    //     }
-    
-    //     handleLoadCar()
-    //     },[id])
+        async function addCity(cityName) {
+            const userDoc = await setDoc(doc(db, 'user', user.uid), {
+                username:user.username
+            })
 
-        
-    async function addCity(cityName) {
-        const newCity = {  //carObj
-            cityName:cityName,
-            
+            const newFavoriteCity = await getWeatherInfoByCityName(cityName)
+
+            const newCityDoc = await addDoc(collection(db, 'user', user.uid, 'city'), newFavoriteCity)
+
         }
+
         
-        const userDoc = await setDoc(doc(db, 'user', user.uid), {
-            username:user.username
-        })
-
-        const cityDoc = await addDoc(collection(db, 'user', user.uid , 'city'), newCity)
-
-        newCity.id = cityDoc.id
-        console.log(newCity)
-
-    
+    async function checkUserCities(name) {
+        for (let city of userCities) {
+            if (name == city.name) {
+                return city
+            }
+        } 
+        const newForecast = await loadForecast(name);
+        // console.log(newForecast);
+        setForecast(newForecast);
+        return newForecast
     }
 
-    async function loadTemp(cityName){
-        for (let userTemp of userTemps) {
-            if (cityName === userTemp.cityName) {
-                 setTemp(userTemp)
-            } else {
-                const userTempsDocs = userTemps
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=790f14b98ea6a36905f407f0f4cd6157&units=imperial`)
+
+
+    async function loadForecast(name){
+
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=790f14b98ea6a36905f407f0f4cd6157&units=imperial`)
             // console.log("got it back, changing to json")
             const weatherData = await response.json()
-            setTemp(weatherData)
-            console.log(weatherData)
-            userTempsDocs.push({
-                // id: weatherData.id,
+            setForecast(weatherData)
+            // console.log(weatherData)
 
-                ...weatherData.data()
-            })
-            // const copyTemps = [...userTempsDocs]
-            // console.log(copyTemps)
-            // setUserTemps(copyTemps)
-
-            }
-        }    
+            
+        return weatherData
     };
 
+    const checkForecast = function () {
+        console.log(forecast)
+        console.log(userCities)
+    }
 
     const value = {
-        temp,
+        forecast,
         addCity,
-        userTemps,
+        userCities,
         getWeatherDataZipOrCity, 
-        loadTemp, 
-        setTemp
+        loadForecast, 
+        setForecast, 
+        checkForecast,
+        checkUserCities
     }
 
     return (

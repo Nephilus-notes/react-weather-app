@@ -12,7 +12,10 @@ export default function SearchBy(props) {
     function handleSearchBy(event) {
         event.preventDefault()
         if (user.loggedIn) {
+
         const formData = new FormData(event.target)
+            if (formData.get('searchParameters')) {
+
         const radioAnswers = formData.get('searchBy')
         console.log(radioAnswers)
         const cityName = formData.get('searchParameters')
@@ -26,6 +29,7 @@ export default function SearchBy(props) {
         // event.target.querySelector('[name="searchParameters"]').placeholder = cityName
 
         setPlaceholderCity(cityName)
+     }
         } else {
             // Not doing anything right now, but I would love to show an error message.
             return (

@@ -5,7 +5,7 @@ import Button from "../components/Button";
 import BasicCityTemps from "../components/BasicCityTemps";
 
 export default function Profile(props) {
-  const { addCity, temp, userTemps, loadTemp, setTemp } =
+  const { addCity, forecast, userCities, loadForecast, setForecast, checkUserCities } =
     useContext(DataContext);
   const { user } = useContext(AuthContext);
   //   const [car, setCar] = useState("");
@@ -14,7 +14,7 @@ export default function Profile(props) {
     event.preventDefault();
     const formData = new FormData(event.target);
     if (formData.get("cityName")) {
-      console.log("form Submission");
+      // console.log("form Submission");
       addCity(formData.get("cityName"));
       event.target.reset();
     }
@@ -35,21 +35,19 @@ export default function Profile(props) {
 
           {/* <p>Favorite Cities:</p> */}
           <div className="flex-container">
-            {userTemps?.map((temp) => ( <Button temp={temp} handleClick={async () => {
-                  console.log(temp);
-                  const newTemp = await loadTemp(temp.cityName);
-                  console.log(newTemp);
-                  setTemp(newTemp);
+            {userCities?.map((forecast) => ( <Button forecast={forecast} handleClick={async () => {
+                  // console.log(forecast);
+                  const newForecast = await checkUserCities(forecast.name);
+                  // console.log(newForecast);
+                  setForecast(newForecast);
                 }}
-                key={temp.id}
+                key={forecast.id}
               />
             ))}
           </div>
-          {/* <div className="flex-container"> */}
 
-            {temp ? <BasicCityTemps temp={temp} showLink="true" /> : <></>}
+            {forecast ? <BasicCityTemps forecast={forecast} showLink="true" /> : <></>}
 
-   {/* </div> */}
       </div>
     );
   } else {
