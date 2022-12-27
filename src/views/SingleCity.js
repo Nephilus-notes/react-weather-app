@@ -16,7 +16,7 @@ export default function CarSingle() {
         }
     
         handleLoadTemp()
-        },[loadTemp, setTemp])
+        },[])
 
     const checkTemp = function () {
         console.log(temp)

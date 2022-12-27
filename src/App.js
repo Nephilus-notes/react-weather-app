@@ -41,7 +41,7 @@ function App() {
             </Route>
            
           </Routes>
-          <redirect to="/" />
+          {/* <redirect to="/" /> */}
      </BrowserRouter>
     </div>
   );

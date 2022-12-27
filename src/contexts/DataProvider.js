@@ -112,19 +112,15 @@ export const DataProvider = function (props) {
         })
 
         const cityDoc = await addDoc(collection(db, 'user', user.uid , 'city'), newCity)
-        // console.log(` this is a new car ${newCar} `)
-        // console.log(newCar)
-        // const doc = await addDoc(collection(db, 'cars'), newCar)
 
         newCity.id = cityDoc.id
         console.log(newCity)
-        // setCars([newCar, ...cars])
-        // setUserCars([newCar, ...userCars])
+
     
     }
 
     async function loadTemp(cityName){
-        for (let userTemp in userTemps) {
+        for (let userTemp of userTemps) {
             if (cityName === userTemp.cityName) {
                  setTemp(userTemp)
             } else {
@@ -133,14 +129,15 @@ export const DataProvider = function (props) {
             // console.log("got it back, changing to json")
             const weatherData = await response.json()
             setTemp(weatherData)
+            console.log(weatherData)
             userTempsDocs.push({
-                id: weatherData.id,
+                // id: weatherData.id,
 
                 ...weatherData.data()
             })
-            const copyTemps = [...userTempsDocs]
+            // const copyTemps = [...userTempsDocs]
             // console.log(copyTemps)
-            setUserTemps(copyTemps)
+            // setUserTemps(copyTemps)
 
             }
         }    
