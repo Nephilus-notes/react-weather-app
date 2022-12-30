@@ -61,9 +61,10 @@ export const DataProvider = function (props) {
                 const userCitiesDocs = []
                 // console.log(user.uid)
                 const q = query(collection(db, 'user', user.uid, 'city'))
-                // console.log(q)
+                console.log(q)
                 const querySnapshot = await getDocs(q)
-                // console.log(querySnapshot)
+                console.log(querySnapshot)
+                console.log("Getting cities")
     
                 querySnapshot.forEach(async (doc) => {
         
@@ -74,20 +75,25 @@ export const DataProvider = function (props) {
                     // console.log(copyTemps)
                     setUserCities(copyTemps)
                 })
-    
+
             }
             getUserCities()
-        },[user.loggedIn, addCity])
+        },[user.loggedIn])
+
 
         async function addCity(cityName) {
             const userDoc = await setDoc(doc(db, 'user', user.uid), {
                 username:user.username
             })
-
+            if (!cityName in userCities) {
+            console.log("Adding City")
             const newFavoriteCity = await getWeatherInfoByCityName(cityName)
-
+                
             const newCityDoc = await addDoc(collection(db, 'user', user.uid, 'city'), newFavoriteCity)
 
+            } else {
+                console.log("That city already exists.")
+            }
         }
 
         

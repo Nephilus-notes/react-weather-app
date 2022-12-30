@@ -8,18 +8,20 @@ export default function Profile(props) {
   const { addCity, forecast, userCities, loadForecast, setForecast, checkUserCities } =
     useContext(DataContext);
   const { user } = useContext(AuthContext);
-  //   const [car, setCar] = useState("");
 
   function handleSubmit(event) {
+    console.log("form Submission");
     event.preventDefault();
     const formData = new FormData(event.target);
     if (formData.get("cityName")) {
-      // console.log("form Submission");
       addCity(formData.get("cityName"));
       event.target.reset();
     }
   }
+
+
   if (user.loggedIn) {
+    console.log(userCities)
     return (
       <div className="Profile">
         <h1>Profile</h1>
@@ -33,20 +35,21 @@ export default function Profile(props) {
         </form>
    </div>   
 
-          {/* <p>Favorite Cities:</p> */}
+           <p>Favorite Cities:</p> 
           <div className="flex-container">
-            {userCities?.map((forecast) => ( <Button forecast={forecast} handleClick={async () => {
-                  // console.log(forecast);
-                  const newForecast = await checkUserCities(forecast.name);
-                  // console.log(newForecast);
-                  setForecast(newForecast);
+            {userCities?.map((city) => ( 
+            <Button city={city} handleClick={async () => {
+                 console.log(city);
+                  const newCity = await checkUserCities(city.name);
+                  console.log(newCity);
+                 setForecast(newCity);
                 }}
-                key={forecast.id}
-              />
+                key={city.id}
+             />
             ))}
           </div>
 
-            {forecast ? <BasicCityTemps forecast={forecast} showLink="true" /> : <></>}
+            {forecast ? <BasicCityTemps forecast={forecast} showLink="true" /> : <></>} 
 
       </div>
     );
