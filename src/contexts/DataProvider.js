@@ -1,15 +1,17 @@
 import {useState, useEffect, createContext, useContext } from 'react'
-import { getFirestore, getDocs, collection, collectionGroup, doc, getDoc, Timestamp, addDoc, orderBy, query, setDoc } from '@firebase/firestore'
+import { getFirestore, getDocs, collection, doc, addDoc, query, setDoc } from '@firebase/firestore'
 import { AuthContext } from './AuthProvider'
 
 export const DataContext = createContext()
 
 export const DataProvider = function (props) {
+    const weatherApiKey = process.env.REACT_APP_WEATHER_API_KEY
+
     const db = getFirestore()
     const { user } = useContext(AuthContext)
     const [forecast, setForecast] = useState("")
     const [userCities, setUserCities] = useState([])
-    const weatherApiKey = process.env.REACT_APP_WEATHER_API_KEY
+    const [ userCityUpdate, setUserCityUpdate ] = useState(false)
         
     const getWeatherDataZipOrCity = async function(radioBtnAnswer, searchParameters) {
         console.log("getting by something")
@@ -61,10 +63,10 @@ export const DataProvider = function (props) {
                 const userCitiesDocs = []
                 // console.log(user.uid)
                 const q = query(collection(db, 'user', user.uid, 'city'))
-                console.log(q)
+                // console.log(q)
                 const querySnapshot = await getDocs(q)
-                console.log(querySnapshot)
-                console.log("Getting cities")
+                // console.log(querySnapshot)
+                // console.log("Getting cities")
     
                 querySnapshot.forEach(async (doc) => {
         
@@ -78,21 +80,25 @@ export const DataProvider = function (props) {
 
             }
             getUserCities()
-        },[user.loggedIn])
+        },[user.loggedIn, userCityUpdate])
 
 
         async function addCity(cityName) {
             const userDoc = await setDoc(doc(db, 'user', user.uid), {
                 username:user.username
             })
-            if (!cityName in userCities) {
-            console.log("Adding City")
-            const newFavoriteCity = await getWeatherInfoByCityName(cityName)
-                
-            const newCityDoc = await addDoc(collection(db, 'user', user.uid, 'city'), newFavoriteCity)
-
-            } else {
+            if (cityName in userCities) {
                 console.log("That city already exists.")
+
+            } else { console.log("Adding City")
+                const newFavoriteCity = await getWeatherInfoByCityName(cityName)
+                newFavoriteCity.time_saved = Date.now()
+                const newCityDoc = await setDoc(doc(db, 'user', user.uid, 'city', cityName), newFavoriteCity)
+                if (userCityUpdate) {
+                    setUserCityUpdate(false)
+                } else {
+                    setUserCityUpdate(true)
+                }
             }
         }
 
@@ -100,13 +106,27 @@ export const DataProvider = function (props) {
     async function checkUserCities(name) {
         for (let city of userCities) {
             if (name == city.name) {
-                return city
+                if (Date.now() < city.time_saved + 300000) {
+                    // console.log("returning city")
+                    return city
+                } else {
+                    // console.log("refreshing city")
+                    const cityForecastRefresh = await loadForecast(name);
+                    cityForecastRefresh.time_saved = Date.now()
+                    await setDoc(doc(db, 'user', user.uid, 'city', cityForecastRefresh.name.toLowerCase()),{
+                        ...cityForecastRefresh,
+                        // time_saved: Date.now()
+                    })
+                    if (userCityUpdate) {
+                        setUserCityUpdate(false)
+                    } else {
+                        setUserCityUpdate(true)
+                    }
+                    return cityForecastRefresh
+                }
             }
         } 
-        const newForecast = await loadForecast(name);
-        // console.log(newForecast);
-        setForecast(newForecast);
-        return newForecast
+        
     }
 
 

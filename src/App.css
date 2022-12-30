@@ -48,10 +48,11 @@ html:focus-within {
 body{
   background-image: linear-gradient(45deg, black, rgb(77, 77, 77), rgb(28, 22, 22), rgb(49, 47, 47));    background-position: left;
   background-position: left; 
-  background-size: 400%;
+  background-size: 800%;
   animation: bganimation 20s infinite alternate;
   min-height: 100vh;
   text-rendering: optimizeSpeed;
+  background-repeat: none;
 }
 @keyframes bganimation {
   0% {
@@ -136,14 +137,7 @@ a {
   text-decoration: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+
 
 
 nav {
@@ -291,4 +285,20 @@ nav li {
 
 .alignBottom {
   align-items: flex-end;
+}
+
+.card-header {
+  position: relative;
+}
+
+.favoriteHeart {
+  width: 30px;
+  height: 30px;
+  position:absolute;
+  transform: translate(28rem, -2rem);
+  color:blue;
+}
+
+.colorChange {
+  fill: rgb(166, 210, 254)
 }

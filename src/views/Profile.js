@@ -14,14 +14,16 @@ export default function Profile(props) {
     event.preventDefault();
     const formData = new FormData(event.target);
     if (formData.get("cityName")) {
-      addCity(formData.get("cityName"));
+      addCity(formData.get("cityName").toLowerCase());
       event.target.reset();
+    } else {
+      console.log("that city already exists.")
     }
   }
 
 
   if (user.loggedIn) {
-    console.log(userCities)
+    // console.log(userCities)
     return (
       <div className="Profile">
         <h1>Profile</h1>
@@ -39,9 +41,9 @@ export default function Profile(props) {
           <div className="flex-container">
             {userCities?.map((city) => ( 
             <Button city={city} handleClick={async () => {
-                 console.log(city);
+                //  console.log(city);
                   const newCity = await checkUserCities(city.name);
-                  console.log(newCity);
+                  // console.log(newCity);
                  setForecast(newCity);
                 }}
                 key={city.id}

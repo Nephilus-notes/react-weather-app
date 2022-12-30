@@ -1,11 +1,13 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { DataContext } from "../contexts/DataProvider";
+import {ReactComponent as UnfilledHeart} from './heart.svg';
+import { ReactComponent as FilledHeart } from "./FilledHeart.svg";
 
 export default function BasicCityTemps(props) {
-  const { forecast } = useContext(DataContext);
+  const { forecast, userCities } = useContext(DataContext);
 
-
+// { (forecast in userCities) ? <FilledHeart/> :   <UnfilledHeart/> }
 
   if (forecast)
    {
@@ -13,7 +15,8 @@ export default function BasicCityTemps(props) {
       <div className="BasicCityTemps container">
         {/* { buildTitleLink() } */}
         <div className="card-header text-light border-dark">
-          <h2>{forecast?.name}</h2> <div></div>
+          <h2>{forecast?.name}</h2> <div className='favoriteHear'>
+            </div> 
         </div>
         <div className="card-body">
           <div className="currentTempDiv">

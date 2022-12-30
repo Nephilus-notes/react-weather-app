@@ -13,7 +13,7 @@ export default function CarSingle() {
         async function handleLoadForecast(){
             const data = await loadForecast(cityName)
             setForecast(data)
-            console.log(data)
+            // console.log(data)
         }
     
         handleLoadForecast()
