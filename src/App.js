@@ -1,6 +1,6 @@
 
 import './App.css';
-import { BrowserRouter, Routes, Route, Link, useLocation, redirect  } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { AuthContext } from "./contexts/AuthProvider";
 import { useContext } from 'react';
 import Home from "./views/Home"
